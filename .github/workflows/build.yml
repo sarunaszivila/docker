@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   generate-matrix:
-    runs-on: ubuntu:-latest
+    runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.generate-matrix.outputs.matrix }}
     steps:
@@ -35,7 +35,7 @@ jobs:
 
   build-fpm-amd64:
     name: PHP FPM ${{ matrix.php }} on amd64
-    runs-on: ubuntu:-latest
+    runs-on: ubuntu-latest
     needs: [generate-matrix]
     strategy: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
     steps:
@@ -91,7 +91,7 @@ jobs:
 
   fpm-merge:
     name: Generate Docker Manifest for PHP ${{ matrix.php }}
-    runs-on: ubuntu:-latest
+    runs-on: ubuntu-latest
     needs: [generate-matrix, build-fpm-amd64, build-fpm-arm64]
     strategy: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
     steps:
@@ -129,7 +129,7 @@ jobs:
   
   caddy:
     name: Build Caddy ${{ matrix.php }}
-    runs-on: ubuntu:-latest
+    runs-on: ubuntu-latest
     needs: [generate-matrix, fpm-merge]
     strategy: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
     steps:
@@ -162,7 +162,7 @@ jobs:
 
   check:
     name: Test Image
-    runs-on: ubuntu:-latest
+    runs-on: ubuntu-latest
     needs: [caddy]
     if: github.ref != 'refs/heads/main'
     steps:
